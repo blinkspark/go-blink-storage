@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"log"
 
@@ -8,7 +9,7 @@ import (
 )
 
 func main() {
-	s, err := server.NewServer("test.key", "ds")
+	s, err := server.NewServer("server.key", "ds")
 	if err != nil {
 		log.Panic(err)
 	}
@@ -17,5 +18,31 @@ func main() {
 		fmt.Printf("%s/p2p/%s\n", addr, id)
 	}
 
-	defer s.Host.Close()
+	topic, err := s.PubSub.Join("test")
+	if err != nil {
+		log.Panic(err)
+	}
+
+	sub, err := topic.Subscribe()
+	if err != nil {
+		log.Panic(err)
+	}
+	go func() {
+		ctx := context.Background()
+		for {
+			msg, err := sub.Next(ctx)
+			if err != nil {
+				log.Println(err)
+				continue
+			}
+			raw := msg.Data
+			from := msg.GetFrom()
+			log.Printf("from:%s,msg:%s\n", from.Pretty(), string(raw))
+			log.Println(topic.ListPeers())
+			log.Println(s.Host.Peerstore().Peers())
+
+		}
+	}()
+	select {}
+	// defer s.Host.Close()
 }

@@ -15,4 +15,4 @@
 # vendor/
 
 pstore/
-test.key
+*.key
