@@ -12,4 +12,5 @@ require (
 	github.com/libp2p/go-libp2p-peerstore v0.2.7
 	github.com/libp2p/go-libp2p-pubsub v0.4.1
 	github.com/libp2p/go-libp2p-quic-transport v0.11.0
+	github.com/multiformats/go-multiaddr v0.3.1
 )
