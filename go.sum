@@ -48,8 +48,6 @@ github.com/beorn7/perks v1.0.1/go.mod h1:G2ZrVWU2WbWT9wwq4/hrbKbnv/1ERSJQ0ibhJ6r
 github.com/bgentry/speakeasy v0.1.0/go.mod h1:+zsyZBPWlz7T6j88CTgSN5bM796AkVf0kBD4zp0CCIs=
 github.com/blinkspark/go-util v0.0.0-20210617045624-d03179ad91bd h1:fIh99/QHh5BtX1zAYph7Oyber0SNsDgEKaIFlzplxoU=
 github.com/blinkspark/go-util v0.0.0-20210617045624-d03179ad91bd/go.mod h1:0xjBI9W8BqP2qpsuVqOSLSAvZt4v1awkC2ok3mssuVI=
-github.com/blinkspark/go-util v0.0.1 h1:0l5LpzcSSl6IStPjdlc9Yp4iPBVHKsavHwW9XxMBvaw=
-github.com/blinkspark/go-util v0.0.1/go.mod h1:BKs697ONtIo1KyBRjZIGgGJx6H6F7dcYRRuRn36IMEc=
 github.com/bradfitz/go-smtpd v0.0.0-20170404230938-deb6d6237625/go.mod h1:HYsPBTaaSFSlLx/70C2HPIMNZpVV8+vt/A+FMnYP11g=
 github.com/btcsuite/btcd v0.0.0-20190213025234-306aecffea32/go.mod h1:DrZx5ec/dmnfpw9KyYoQyYo7d0KEvTkk/5M/vbZjAr8=
 github.com/btcsuite/btcd v0.0.0-20190523000118-16327141da8c/go.mod h1:3J08xEfcugPacsc34/LKRU2yO7YmuT8yt28J8k2+rrI=

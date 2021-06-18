@@ -2,10 +2,12 @@ package server
 
 import (
 	"context"
+	"fmt"
 	"os"
 	"time"
 
 	myutil "github.com/blinkspark/go-util"
+	ds "github.com/ipfs/go-datastore"
 	badgderds "github.com/ipfs/go-ds-badger"
 	"github.com/libp2p/go-libp2p"
 	connmgr "github.com/libp2p/go-libp2p-connmgr"
@@ -23,9 +25,10 @@ type Server struct {
 	host.Host
 	*dht.IpfsDHT
 	*pubsub.PubSub
+	ds.Datastore
 }
 
-func NewServer(keyPath string, dataStorePath string) (s *Server, err error) {
+func NewServer(keyPath string, dsPath string, port int) (s *Server, err error) {
 	ctx := context.Background()
 	s = &Server{}
 	// gen priv
@@ -54,22 +57,18 @@ func NewServer(keyPath string, dataStorePath string) (s *Server, err error) {
 	}
 	id := libp2p.Identity(s.PrivKey)
 
-	ds, err := badgderds.NewDatastore("pstore", &badgderds.DefaultOptions)
+	ds, err := badgderds.NewDatastore(dsPath, &badgderds.DefaultOptions)
 	if err != nil {
 		return nil, err
 	}
+	s.Datastore = ds
 	ps, err := pstoreds.NewPeerstore(ctx, ds, pstoreds.DefaultOpts())
 	if err != nil {
 		return nil, err
 	}
 
 	h, err := libp2p.New(ctx,
-		id, libp2p.ListenAddrStrings(
-			"/ip4/0.0.0.0/tcp/12233",      // regular tcp connections
-			"/ip6/::/tcp/12233",           // regular tcp6 connections
-			"/ip4/0.0.0.0/udp/12233/quic", // a UDP endpoint for the QUIC transport
-			"/ip6/::/udp/12233/quic",      // a UDP6 endpoint for the QUIC transport
-		),
+		id, libp2p.ListenAddrStrings(genListenAddrs(port)...),
 		libp2p.Transport(libp2pquic.NewTransport),
 		// support any other default transports (TCP)
 		libp2p.DefaultTransports,
@@ -95,4 +94,12 @@ func NewServer(keyPath string, dataStorePath string) (s *Server, err error) {
 
 	s.Host = h
 	return s, nil
+}
+
+func genListenAddrs(port int) (addrs []string) {
+	addrs = append(addrs, fmt.Sprintf("/ip4/0.0.0.0/tcp/%d", port))
+	addrs = append(addrs, fmt.Sprintf("/ip6/::/tcp/%d", port))
+	addrs = append(addrs, fmt.Sprintf("/ip4/0.0.0.0/udp/%d/quic", port))
+	addrs = append(addrs, fmt.Sprintf("/ip6/::/udp/%d/quic", port))
+	return
 }
